@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%2309111E' width='180' height='180'/%3E%3Ctext x='50%25' y='50%25' font-family='Cairo' font-size='90' font-weight='900' fill='%23C5A059' text-anchor='middle' dominant-baseline='central'%3EMI%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
 <style>
 /* ════════════════════════════════════════════
    TOKENS
@@ -46,17 +46,10 @@
 RESET
 ════════════════════════════════════════════ */
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html {
-scroll-behavior:smooth;
-background:#09111E;
-background-color:#09111E;
-}
+html { scroll-behavior:smooth; background:#09111E; }
 body {
 font-family:‘Cairo’,sans-serif;
-background:#09111E;
-background-color:#09111E;
 background:var(–ink);
-color:#E8EDF5;
 color:var(–text);
 overflow-x:hidden;
 -webkit-font-smoothing:antialiased;
@@ -66,6 +59,13 @@ min-height:100vh;
 ::-webkit-scrollbar-track { background:var(–ink2); }
 ::-webkit-scrollbar-thumb { background:var(–gold3); border-radius:4px; }
 a { text-decoration:none; color:inherit; }
+
+/* ════════════════════════════════════════════
+PAGE SYSTEM
+════════════════════════════════════════════ */
+[data-page] { display:none; }
+[data-page].active { display:block; animation:pageIn .3s ease; }
+@keyframes pageIn { from { opacity:0; } to { opacity:1; } }
 
 /* ════════════════════════════════════════════
 WELCOME POPUP
@@ -168,14 +168,15 @@ padding:0 28px;
 transition:all var(–tr);
 }
 .topnav.scrolled { background:rgba(9,17,30,.97); }
-.nav-brand { display:flex; align-items:center; gap:11px; }
+.nav-brand { display:flex; align-items:center; gap:11px; cursor:pointer; }
 .nav-mark {
 width:36px; height:36px;
 background:linear-gradient(135deg,var(–ink3),var(–card));
 border:1px solid var(–border); border-radius:10px;
 display:flex; align-items:center; justify-content:center;
-font-weight:900; font-size:.8rem; color:var(–gold);
+overflow:hidden;
 }
+.nav-mark img { width:100%; height:100%; object-fit:cover; }
 .nav-name { font-weight:900; font-size:.95rem; color:var(–text); }
 .nav-links { display:flex; align-items:center; gap:4px; }
 @media(max-width:640px) { .nav-links { display:none; } }
@@ -184,11 +185,9 @@ padding:7px 14px; border-radius:10px; font-size:.8rem; font-weight:700;
 color:var(–muted); border:none; background:transparent;
 cursor:pointer; transition:all var(–tr); font-family:‘Cairo’,sans-serif;
 }
-.nav-link:hover { color:var(–gold); background:var(–goldBg); }
-.nav-link.active { color:var(–gold); background:var(–goldBg); }
+.nav-link:hover, .nav-link.active { color:var(–gold); background:var(–goldBg); }
 .nav-cta {
 padding:8px 20px; border-radius:14px;
-background:#8B6B35;
 background:linear-gradient(135deg,#8B6B35,#C5A059);
 color:#09111E !important; font-family:‘Cairo’,sans-serif;
 font-weight:900; font-size:.8rem; border:none; cursor:pointer;
@@ -196,6 +195,20 @@ transition:all .22s ease; text-decoration:none;
 display:inline-flex; align-items:center; gap:6px;
 }
 .nav-cta:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(197,160,89,.35); }
+
+/* ════════════════════════════════════════════
+BACK BUTTON
+════════════════════════════════════════════ */
+.back-btn {
+display:inline-flex; align-items:center; gap:8px;
+padding:10px 16px; border-radius:10px;
+background:var(–goldBg); border:1px solid rgba(197,160,89,.3);
+color:var(–gold); font-family:‘Cairo’,sans-serif;
+font-weight:800; font-size:.9rem; cursor:pointer;
+transition:all var(–tr); border:none;
+margin-bottom:24px;
+}
+.back-btn:hover { background:rgba(197,160,89,.15); border-color:var(–gold); }
 
 /* ════════════════════════════════════════════
 HERO
@@ -257,16 +270,12 @@ font-weight:900; line-height:1.15;
 margin-bottom:20px;
 }
 .hero-title .line1 { color:var(–text); display:block; }
-.hero-title .line2 {
-color:#E2BF7A;
-display:block;
-}
+.hero-title .line2 { color:#E2BF7A; display:block; }
 .hero-sub { color:var(–muted); font-size:1.05rem; line-height:1.8; margin-bottom:40px; max-width:500px; margin-inline:auto; }
 
 .hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 .hero-btn-primary {
 padding:15px 34px; border-radius:22px;
-background:#8B6B35;
 background:linear-gradient(135deg,#8B6B35,#C5A059);
 color:#09111E; font-family:‘Cairo’,sans-serif; font-weight:900;
 font-size:1rem; border:none; cursor:pointer;
@@ -495,7 +504,7 @@ text-align:center;
 .footer-brand { color:var(–gold); font-weight:900; font-size:1rem; margin-bottom:8px; }
 .footer-copy  { color:var(–muted); font-size:.78rem; font-weight:600; }
 .footer-links { display:flex; gap:16px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
-.footer-links a { color:var(–dim); font-size:.78rem; font-weight:600; transition:color var(–tr); }
+.footer-links a { color:var(–dim); font-size:.78rem; font-weight:600; transition:color var(–tr); cursor:pointer; }
 .footer-links a:hover { color:var(–gold); }
 
 /* ════════════════════════════════════════════
@@ -526,10 +535,23 @@ RESPONSIVE
 }
 
 /* ════════════════════════════════════════════
-HIDDEN / PAGES
+INNER PAGES HEADER
 ════════════════════════════════════════════ */
-[data-page] { display:none; }
-[data-page].active { display:block; }
+.page-header {
+padding:100px 24px 50px;
+text-align:center;
+background:var(–panel);
+border-bottom:1px solid var(–border);
+}
+.page-header h1 {
+font-size:clamp(1.8rem,5vw,2.8rem);
+font-weight:900; color:var(–text);
+margin-bottom:12px;
+}
+.page-header p {
+color:var(–muted); font-size:1rem;
+max-width:600px; margin:0 auto;
+}
 </style>
 
 </head>
@@ -563,8 +585,51 @@ HIDDEN / PAGES
 <!-- ══════════════ TOP NAV ══════════════ -->
 
 <nav class="topnav" id="topnav">
-  <div class="nav-brand">
-    <div class="nav-mark">MI</div>
+  <div class="nav-brand" onclick="goHome()">
+    <div class="nav-mark">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <!-- خلفية زرقاء -->
+        <circle cx="100" cy="100" r="95" fill="url(#grad1)" />
+        <!-- دائرة ذهبية داخلية -->
+        <circle cx="100" cy="100" r="75" fill="none" stroke="url(#grad2)" stroke-width="8" />
+        <!-- كتب -->
+        <g id="book1">
+          <rect x="45" y="70" width="25" height="35" rx="2" fill="#E8D4B8" />
+          <rect x="50" y="75" width="15" height="25" fill="#F5E6D3" />
+          <line x1="52" y1="77" x2="52" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="54" y1="77" x2="54" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="56" y1="77" x2="56" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="58" y1="77" x2="58" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="60" y1="77" x2="60" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="62" y1="77" x2="62" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+        </g>
+        <!-- كتب الثاني -->
+        <g id="book2">
+          <rect x="130" y="70" width="25" height="35" rx="2" fill="#E8D4B8" />
+          <rect x="135" y="75" width="15" height="25" fill="#F5E6D3" />
+          <line x1="137" y1="77" x2="137" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="139" y1="77" x2="139" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="141" y1="77" x2="141" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="143" y1="77" x2="143" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="145" y1="77" x2="145" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+          <line x1="147" y1="77" x2="147" y2="97" stroke="#D4AF37" stroke-width="0.5" opacity="0.5" />
+        </g>
+        <!-- سهم ذهبي في الوسط -->
+        <polygon points="100,50 110,75 100,70 90,75" fill="url(#grad2)" />
+        <!-- ميزان خطوط -->
+        <path d="M 70 110 Q 100 130 130 110" fill="none" stroke="url(#grad2)" stroke-width="4" stroke-linecap="round" />
+      </svg>
+    </div>
     <div>
       <div class="nav-name">Mizan Academy IQ</div>
     </div>
@@ -574,10 +639,10 @@ HIDDEN / PAGES
     <button class="nav-link" onclick="goToSection('features')">المميزات</button>
     <button class="nav-link" onclick="goToSection('sections')">الأقسام</button>
   </div>
-  <a href="https://t.me/Quizm1" target="_blank" class="nav-cta"><i class="fab fa-telegram"></i> تواصل معنا</a>
+  <button class="nav-cta" onclick="goPage('contact')"><i class="fas fa-envelope"></i> تواصل</button>
 </nav>
 
-<!-- ══════════════ PAGES CONTAINER ══════════════ -->
+<!-- ══════════════ PAGES ══════════════ -->
 
 <!-- HOME PAGE -->
 
@@ -606,9 +671,9 @@ HIDDEN / PAGES
       <button class="hero-btn-primary" onclick="goToSection('sections')">
         <i class="fas fa-rocket"></i> اكتشف المنصة
       </button>
-      <a href="https://www.mizaniq.online/ba" class="hero-btn-secondary">
+      <button class="hero-btn-secondary" onclick="goPage('portal')">
         <i class="fas fa-university"></i> بوابة الطالب
-      </a>
+      </button>
     </div>
   </div>
 
@@ -740,40 +805,40 @@ HIDDEN / PAGES
   <div class="section-inner">
     <div class="sec-eyebrow reveal"><i class="fas fa-th-large"></i> الأقسام</div>
     <h2 class="sec-title reveal">استكشف كل ما نقدمه</h2>
-    <p class="sec-sub reveal">بوابات متخصصة تمنحك وصولاً سريعاً لكل خدمات ميزان.</p>
+    <p class="sec-sub reveal">صفحات متخصصة تمنحك وصولاً سريعاً لكل خدمات ميزان.</p>
 
 ```
 <div class="links-grid">
-  <a class="link-card reveal" href="https://www.mizaniq.online/pr" target="_blank">
+  <div class="link-card reveal" onclick="goPage('features')">
     <div class="link-icon"><i class="fas fa-magic"></i></div>
     <div class="link-label">المميزات</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
-  <a class="link-card reveal reveal-delay-1" href="https://www.mizaniq.online/su" target="_blank">
+  </div>
+  <div class="link-card reveal reveal-delay-1" onclick="goPage('packages')">
     <div class="link-icon"><i class="fas fa-gem"></i></div>
     <div class="link-label">الباقات</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
-  <a class="link-card reveal reveal-delay-2" href="https://www.mizaniq.online/op" target="_blank">
+  </div>
+  <div class="link-card reveal reveal-delay-2" onclick="goPage('reviews')">
     <div class="link-icon"><i class="fas fa-comment-dots"></i></div>
     <div class="link-label">آراء الطلبة</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
-  <a class="link-card reveal reveal-delay-3" href="https://www.mizaniq.online/wh" target="_blank">
+  </div>
+  <div class="link-card reveal reveal-delay-3" onclick="goPage('wheel')">
     <div class="link-icon"><i class="fas fa-dharmachakra"></i></div>
     <div class="link-label">دولاب الحظ</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
-  <a class="link-card reveal" href="https://www.mizaniq.online/ba" target="_blank">
+  </div>
+  <div class="link-card reveal" onclick="goPage('portal')">
     <div class="link-icon"><i class="fas fa-university"></i></div>
     <div class="link-label">بوابة ميزان</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
-  <a class="link-card reveal reveal-delay-1" href="https://www.mizaniq.online/qu" target="_blank">
+  </div>
+  <div class="link-card reveal reveal-delay-1" onclick="goPage('questions')">
     <div class="link-icon"><i class="fas fa-question-circle"></i></div>
     <div class="link-label">الأسئلة</div>
     <div class="link-arrow"><i class="fas fa-arrow-left"></i></div>
-  </a>
+  </div>
 </div>
 ```
 
@@ -788,14 +853,246 @@ HIDDEN / PAGES
       <div class="cta-icon"><i class="fas fa-rocket"></i></div>
       <div class="cta-title">هل أنت مستعد للتفوق؟</div>
       <p class="cta-sub">انضم إلى آلاف الطلبة المتميزين وابدأ رحلتك نحو النجاح الدراسي مع ميزان أكاديمي اليوم.</p>
-      <a href="https://t.me/Quizm1" target="_blank" class="cta-tg">
-        <i class="fab fa-telegram"></i> تواصل معنا عبر تيليجرام
-      </a>
+      <button class="cta-tg" onclick="goPage('contact')">
+        <i class="fas fa-envelope"></i> تواصل معنا
+      </button>
       <div class="cta-email"><i class="fas fa-envelope"></i> <span>info@mizaniq.online</span></div>
     </div>
   </div>
 </section>
 
+</div>
+
+<!-- FEATURES PAGE -->
+
+<div data-page="features">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>المميزات المتقدمة</h1>
+    <p>اكتشف جميع المميزات التي تجعل ميزان أكاديمي الخيار الأول للطلبة</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(197,160,89,.1);color:var(--gold);"><i class="fas fa-brain"></i></div>
+          <div class="feat-title">تحليل ذكي</div>
+          <div class="feat-desc">نظام تحليل متقدم يقيّم أدائك ويقدم توصيات شخصية.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(59,130,246,.1);color:var(--blue);"><i class="fas fa-chart-line"></i></div>
+          <div class="feat-title">تقارير شاملة</div>
+          <div class="feat-desc">تقارير مفصلة ورسوم بيانية سهلة الفهم.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(16,185,129,.1);color:var(--green);"><i class="fas fa-users"></i></div>
+          <div class="feat-title">مجتمع تعليمي</div>
+          <div class="feat-desc">تواصل مع طلبة آخرين وتبادل الخبرات.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(239,68,68,.1);color:#FCA5A5;"><i class="fas fa-book"></i></div>
+          <div class="feat-title">مكتبة متكاملة</div>
+          <div class="feat-desc">آلاف الموارد التعليمية بمتناول يدك.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(139,92,246,.1);color:#A78BFA;"><i class="fas fa-mobile-alt"></i></div>
+          <div class="feat-title">تطبيق الموبايل</div>
+          <div class="feat-desc">تعلم في أي وقت ومن أي مكان.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(252,165,165,.1);color:#FCA5A5;"><i class="fas fa-headset"></i></div>
+          <div class="feat-title">دعم فني متاح</div>
+          <div class="feat-desc">فريق دعم متاح 24/7 للمساعدة.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PACKAGES PAGE -->
+
+<div data-page="packages">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>الباقات والأسعار</h1>
+    <p>اختر الباقة التي تناسب احتياجاتك</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(197,160,89,.1);color:var(--gold);"><i class="fas fa-star"></i></div>
+          <div class="feat-title">باقة أساسية</div>
+          <div class="feat-desc">الوصول للمنصة الأساسية والأقسام الرئيسية.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(59,130,246,.1);color:var(--blue);"><i class="fas fa-crown"></i></div>
+          <div class="feat-title">باقة بريميوم</div>
+          <div class="feat-desc">وصول كامل مع ميزات متقدمة وأولويات في الدعم.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(16,185,129,.1);color:var(--green);"><i class="fas fa-gem"></i></div>
+          <div class="feat-title">باقة ماستر</div>
+          <div class="feat-desc">أعلى مستويات الخدمة مع استشارات شخصية.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- REVIEWS PAGE -->
+
+<div data-page="reviews">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>آراء الطلبة</h1>
+    <p>استمع لتجارب طلبة حقيقيين من منصة ميزان</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(197,160,89,.1);color:var(--gold);"><i class="fas fa-quote-left"></i></div>
+          <div class="feat-title">محمد علي</div>
+          <div class="feat-desc">"ميزان غيّرت طريقة دراستي تماماً، تفوقت هذا الفصل بفضل المنصة الرائعة"</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(59,130,246,.1);color:var(--blue);"><i class="fas fa-quote-left"></i></div>
+          <div class="feat-title">فاطمة أحمد</div>
+          <div class="feat-desc">"أفضل منصة تعليمية استخدمتها، مميزات رائعة وتصميم احترافي"</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(16,185,129,.1);color:var(--green);"><i class="fas fa-quote-left"></i></div>
+          <div class="feat-title">علي حسن</div>
+          <div class="feat-desc">"الدعم الفني سريع جداً والفريق متعاون، شكراً لكم"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- WHEEL PAGE -->
+
+<div data-page="wheel">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>دولاب الحظ</h1>
+    <p>جرب حظك واربح جوائز مميزة</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div style="text-align:center; padding:60px 20px;">
+        <div style="font-size:4rem; margin-bottom:30px;"><i class="fas fa-dharmachakra" style="color:var(--gold); animation:spin 3s linear infinite;"></i></div>
+        <h2 style="color:var(--text); margin-bottom:20px;">قريباً...</h2>
+        <p style="color:var(--muted); max-width:500px; margin:0 auto;">دولاب الحظ قيد الإنشاء حالياً، سيكون هناك قريباً جداً!</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PORTAL PAGE -->
+
+<div data-page="portal">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>بوابة الطالب</h1>
+    <p>سجل الدخول إلى حسابك وتابع تقدمك</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div style="max-width:500px; margin:0 auto;">
+        <div style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r-xl); padding:40px; text-align:center;">
+          <div style="font-size:3rem; margin-bottom:30px; color:var(--gold);"><i class="fas fa-lock"></i></div>
+          <h2 style="color:var(--text); margin-bottom:20px;">قريباً قريباً</h2>
+          <p style="color:var(--muted); line-height:1.8; margin-bottom:30px;">
+            بوابة الطالب قيد الإنشاء الآن، ستتمكن قريباً جداً من تسجيل الدخول والوصول إلى جميع موادك الدراسية.
+          </p>
+          <button class="hero-btn-primary" onclick="goHome()" style="width:100%;">
+            العودة للرئيسية
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- QUESTIONS PAGE -->
+
+<div data-page="questions">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>الأسئلة والأجوبة</h1>
+    <p>لديك سؤال؟ نحن هنا للمساعدة</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div style="max-width:600px; margin:0 auto;">
+        <div style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r-xl); padding:30px; margin-bottom:20px;">
+          <h3 style="color:var(--text); margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--gold); margin-left:10px;"></i> كيف أبدأ مع ميزان؟</h3>
+          <p style="color:var(--muted); line-height:1.8;">
+            ببساطة شديدة! سجل حسابك من بوابة الطالب واختر الباقة التي تناسبك، وستحصل فوراً على الوصول الكامل.
+          </p>
+        </div>
+
+```
+    <div style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r-xl); padding:30px; margin-bottom:20px;">
+      <h3 style="color:var(--text); margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--gold); margin-left:10px;"></i> هل هناك نسخة تجريبية مجانية؟</h3>
+      <p style="color:var(--muted); line-height:1.8;">
+        نعم! يمكنك تجربة النسخة الأساسية مجاناً للتأكد من أن المنصة تناسبك.
+      </p>
+    </div>
+
+    <div style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r-xl); padding:30px;">
+      <h3 style="color:var(--text); margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--gold); margin-left:10px;"></i> كيف أتواصل مع الدعم الفني؟</h3>
+      <p style="color:var(--muted); line-height:1.8;">
+        يمكنك التواصل معنا عبر البريد الإلكتروني أو عبر قناة التيليجرام، الفريق متاح 24/7.
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+  </section>
+</div>
+
+<!-- CONTACT PAGE -->
+
+<div data-page="contact">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> رجوع</button>
+    <h1>تواصل معنا</h1>
+    <p>نحن هنا للإجابة على استفساراتك</p>
+  </div>
+  <section class="section">
+    <div class="section-inner">
+      <div style="max-width:600px; margin:0 auto;">
+        <div style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r-xl); padding:40px; text-align:center;">
+          <h2 style="color:var(--text); margin-bottom:30px;">طرق التواصل</h2>
+
+```
+      <div style="margin-bottom:30px; padding:20px; background:var(--card); border-radius:var(--r-lg);">
+        <div style="font-size:2rem; color:var(--gold); margin-bottom:10px;"><i class="fab fa-telegram"></i></div>
+        <div style="color:var(--text); font-weight:800; margin-bottom:5px;">تيليجرام</div>
+        <a href="https://t.me/Quizm1" target="_blank" style="color:var(--gold); text-decoration:underline;">@Quizm1</a>
+      </div>
+
+      <div style="margin-bottom:30px; padding:20px; background:var(--card); border-radius:var(--r-lg);">
+        <div style="font-size:2rem; color:var(--gold); margin-bottom:10px;"><i class="fas fa-envelope"></i></div>
+        <div style="color:var(--text); font-weight:800; margin-bottom:5px;">البريد الإلكتروني</div>
+        <a href="mailto:info@mizaniq.online" style="color:var(--gold); text-decoration:underline;">info@mizaniq.online</a>
+      </div>
+
+      <div style="padding:20px; background:var(--card); border-radius:var(--r-lg);">
+        <div style="font-size:2rem; color:var(--gold); margin-bottom:10px;"><i class="fab fa-instagram"></i></div>
+        <div style="color:var(--text); font-weight:800; margin-bottom:5px;">إنستجرام</div>
+        <a href="https://instagram.com/mizaniq1" target="_blank" style="color:var(--gold); text-decoration:underline;">@mizaniq1</a>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </section>
 </div>
 
 <!-- ══════════════ FOOTER ══════════════ -->
@@ -804,10 +1101,10 @@ HIDDEN / PAGES
   <div class="footer-brand">MIZAN ACADEMY IQ</div>
   <div class="footer-copy">© 2026 Mizan Academy IQ — جميع الحقوق محفوظة</div>
   <div class="footer-links">
-    <a href="https://www.mizaniq.online/pr" target="_blank">المميزات</a>
-    <a href="https://www.mizaniq.online/su" target="_blank">الباقات</a>
-    <a href="https://www.mizaniq.online/ba" target="_blank">البوابة</a>
-    <a href="https://t.me/Quizm1" target="_blank">تواصل</a>
+    <a onclick="goPage('features')">المميزات</a>
+    <a onclick="goPage('packages')">الباقات</a>
+    <a onclick="goPage('portal')">البوابة</a>
+    <a onclick="goPage('contact')">تواصل</a>
   </div>
 </footer>
 
@@ -828,13 +1125,13 @@ HIDDEN / PAGES
   "lang": "ar",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%2309111E' width='192' height='192'/%3E%3Ctext x='50%25' y='50%25' font-family='Cairo,sans-serif' font-size='100' font-weight='900' fill='%23C5A059' text-anchor='middle' dominant-baseline='central'%3EMI%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='grad1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234A90E2;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23357ABD;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='grad2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23D4AF37;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23C5A059;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='96' cy='96' r='90' fill='url(%23grad1)' /%3E%3Ccircle cx='96' cy='96' r='70' fill='none' stroke='url(%23grad2)' stroke-width='8' /%3E%3C/svg%3E",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%2309111E' width='512' height='512'/%3E%3Ctext x='50%25' y='50%25' font-family='Cairo,sans-serif' font-size='300' font-weight='900' fill='%23C5A059' text-anchor='middle' dominant-baseline='central'%3EMI%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234A90E2;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23357ABD;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='grad2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23D4AF37;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23C5A059;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='256' cy='256' r='240' fill='url(%23grad1)' /%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='url(%23grad2)' stroke-width='20' /%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -843,7 +1140,7 @@ HIDDEN / PAGES
   "categories": ["education"],
   "screenshots": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'%3E%3Crect fill='%2309111E' width='540' height='720'/%3E%3Ctext x='50%25' y='50%25' font-family='Cairo,sans-serif' font-size='120' font-weight='900' fill='%23C5A059' text-anchor='middle' dominant-baseline='central'%3EMizan Academy%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'%3E%3Crect fill='%2309111E' width='540' height='720'/%3E%3Ctext x='50%25' y='50%25' font-family='Cairo,sans-serif' font-size='80' font-weight='900' fill='%23C5A059' text-anchor='middle' dominant-baseline='central'%3EMizan%3C/text%3E%3C/svg%3E",
       "sizes": "540x720",
       "type": "image/svg+xml",
       "form_factor": "narrow"
@@ -852,14 +1149,13 @@ HIDDEN / PAGES
 }
 </script>
 
-<!-- ══════════════ SERVICE WORKER REGISTRATION ══════════════ -->
+<!-- ══════════════ SERVICE WORKER & SCRIPTS ══════════════ -->
 
 <script>
 /* ─────────────────────────────────────────────────────────────
    PWA CORE
 ────────────────────────────────────────────────────────────────── */
 
-// 1. Register Service Worker
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register(
     'data:application/javascript,'+encodeURIComponent(`
@@ -898,7 +1194,6 @@ self.addEventListener('fetch',(e)=>{
   ).catch(e=>console.warn('SW registration failed',e));
 }
 
-// 2. Generate & register manifest
 const manifest=JSON.parse(document.getElementById('manifest-data').textContent);
 const blobUrl=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
 const link=document.createElement('link');
@@ -906,17 +1201,15 @@ link.rel='manifest';
 link.href=blobUrl;
 document.head.appendChild(link);
 
-// 3. PWA Install Prompt
+/* ─────────────────────────────────────────────────────────────
+   PWA INSTALL
+────────────────────────────────────────────────────────────────── */
+
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt',(e)=>{
   e.preventDefault();
   deferredPrompt=e;
   document.getElementById('installBanner').classList.add('show');
-});
-
-window.addEventListener('appinstalled',()=>{
-  deferredPrompt=null;
-  document.getElementById('installBanner').classList.remove('show');
 });
 
 function installPWA(){
@@ -931,6 +1224,35 @@ function installPWA(){
 
 function dismissInstall(){
   document.getElementById('installBanner').classList.remove('show');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PAGE ROUTING
+────────────────────────────────────────────────────────────────── */
+
+function goPage(pageName){
+  // Hide all pages
+  document.querySelectorAll('[data-page]').forEach(el=>el.classList.remove('active'));
+  // Show selected page
+  const page=document.querySelector(`[data-page="${pageName}"]`);
+  if(page)page.classList.add('active');
+  // Scroll to top
+  window.scrollTo(0,0);
+  // Close install banner
+  dismissInstall();
+}
+
+function goHome(){
+  goPage('home');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION
+────────────────────────────────────────────────────────────────── */
+
+function goToSection(sectionId){
+  const el=document.getElementById(sectionId);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -954,21 +1276,12 @@ window.addEventListener('load',()=>{
 });
 
 /* ─────────────────────────────────────────────────────────────
-   NAVBAR SCROLL EFFECT
+   SCROLL EFFECTS
 ────────────────────────────────────────────────────────────────── */
 
 window.addEventListener('scroll',()=>{
   document.getElementById('topnav').classList.toggle('scrolled',window.scrollY>40);
 },{passive:true});
-
-/* ─────────────────────────────────────────────────────────────
-   ROUTING
-────────────────────────────────────────────────────────────────── */
-
-function goToSection(sectionId){
-  const el=document.getElementById(sectionId);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
-}
 
 /* ─────────────────────────────────────────────────────────────
    REVEAL ON SCROLL
@@ -1001,6 +1314,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   },2500);
 });
+
+/* ─────────────────────────────────────────────────────────────
+   SPINNER ANIMATION
+────────────────────────────────────────────────────────────────── */
+
+const style=document.createElement('style');
+style.textContent=`
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to { transform:rotate(360deg); }
+}
+`;
+document.head.appendChild(style);
 </script>
 
 </body>
